@@ -1,0 +1,37 @@
+{
+  "name": "kuro",
+  "version": "1.0.0",
+  "description": "Background HTTP Cron Scheduler - Lightweight, fast, and easy to use",
+  "type": "module",
+  "main": "src/index.ts",
+  "bin": {
+    "kuro": "./dist/kuro"
+  },
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --compile --outfile dist/kuro",
+    "build:all": "bun run scripts/build-all.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test"
+  },
+  "keywords": [
+    "cron",
+    "scheduler",
+    "http",
+    "background-jobs",
+    "task-scheduler",
+    "webhook",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.8.2",
+    "cron-parser": "^4.9.0",
+    "curlconverter": "^4.12.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

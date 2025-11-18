@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build output
+dist/
+*.exe
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Kuro data
+kuro.db
+kuro-data/
+
+BUGFIX.md
+DAEMON

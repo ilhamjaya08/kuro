@@ -1,0 +1,108 @@
+Starting Kuro daemon...
+Starting scheduler...
+Found 1 running tasks
+Scheduled task 5 (mantap) - Next run: 2025-11-20T13:19:00.000Z
+Daemon started successfully
+Starting Kuro daemon...
+Starting scheduler...
+Found 1 running tasks
+Scheduled task 5 (mantap) - Next run: 2025-11-20T13:19:00.000Z
+Daemon started successfully
+Running task 5 (mantap)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Executing task: mantap (GET http://localhost:8000)
+Failed to schedule next run for task 5:  98 |       UPDATE tasks
+ 99 |       SET ${fields}, updated_at = strftime('%s', 'now')
+100 |       WHERE id = ?
+101 |     `);
+102 | 
+103 |     const info = stmt.run(...values, id);
+                            ^
+SQLiteError: database is locked
+      errno: 5,
+ byteOffset: -1,
+       code: "SQLITE_BUSY"
+
+      at #run (bun:sqlite:185:20)
+      at update (/mnt/data/projects/cron/src/db/models.ts:103:23)
+      at executeTask (/mnt/data/projects/cron/src/core/scheduler.ts:129:21)
+
+Next run for task 5: 2025-11-20T13:20:00.000Z
+Task 5 completed: error (762ms)
+Task 5 completed: error (1483ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:21:00.000Z
+Task 5 completed: error (749ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:22:00.000Z
+Task 5 completed: error (1871ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:23:00.000Z
+Task 5 completed: error (982ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:24:00.000Z
+Task 5 completed: error (900ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:25:00.000Z
+Task 5 completed: error (1988ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:26:00.000Z
+Task 5 completed: error (755ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:27:00.000Z
+Task 5 completed: error (1160ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:28:00.000Z
+Task 5 completed: error (2142ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:29:00.000Z
+Task 5 completed: error (809ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:30:00.000Z
+Task 5 completed: error (1064ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:31:00.000Z
+Task 5 completed: error (2301ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:32:00.000Z
+Task 5 completed: error (1544ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:33:00.000Z
+Task 5 completed: error (1151ms)
+Running task 5 (mantap)
+Executing task: mantap (GET http://localhost:8000)
+Next run for task 5: 2025-11-20T13:34:00.000Z
+Task 5 completed: error (1910ms)
+Shutting down daemon...
+Shutting down daemon...
+Stopping scheduler...
+Stopping scheduler...
+Stopped task 5
+Stopped task 5
+247 |       UPDATE daemon_state
+248 |       SET status = ?, pid = ?, started_at = ?
+249 |       WHERE id = 1
+250 |     `);
+251 |     const startedAt = status === 'running' ? Math.floor(Date.now() / 1000) : null;
+252 |     const info = stmt.run(status, pid || null, startedAt);
+                            ^
+SQLiteError: database is locked
+      at #run (bun:sqlite:185:20)
+      at updateStatus (/mnt/data/projects/cron/src/db/models.ts:252:23)
+      at shutdown (/mnt/data/projects/cron/src/index.ts:39:17)
+
+Bun v1.3.2 (Linux x64)

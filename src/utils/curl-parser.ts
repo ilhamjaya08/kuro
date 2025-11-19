@@ -1,5 +1,3 @@
-import * as curlconverter from 'curlconverter';
-
 export interface ParsedHttpRequest {
   method: string;
   url: string;
@@ -11,37 +9,88 @@ export interface ParsedHttpRequest {
   };
 }
 
+/**
+ * Manual curl command parser - compatible with bun compile
+ * Supports common curl patterns without external dependencies
+ */
 export const parseCurlCommand = (curlCommand: string): ParsedHttpRequest | null => {
   try {
-    const jsCode = curlconverter.toJsonString(curlCommand);
-    const parsed = JSON.parse(jsCode);
+    // Remove leading/trailing whitespace and normalize
+    let cmd = curlCommand.trim();
+
+    // Remove 'curl' prefix if present
+    if (cmd.startsWith('curl ')) {
+      cmd = cmd.substring(5);
+    }
 
     const result: ParsedHttpRequest = {
-      method: (parsed.method || 'GET').toUpperCase(),
-      url: parsed.url || parsed.uri || '',
+      method: 'GET',
+      url: '',
       headers: {},
     };
 
-    if (parsed.headers) {
-      if (typeof parsed.headers === 'object') {
-        result.headers = parsed.headers;
-      }
+    // Parse method (-X or --request)
+    const methodMatch = cmd.match(/(?:-X|--request)\s+([A-Z]+)/);
+    if (methodMatch) {
+      result.method = methodMatch[1].toUpperCase();
+      cmd = cmd.replace(methodMatch[0], '');
     }
 
-    if (parsed.body || parsed.data) {
-      result.body = parsed.body || parsed.data;
+    // Parse headers (-H or --header)
+    const headerRegex = /(?:-H|--header)\s+(['"])(.*?)\1/g;
+    let headerMatch;
+    while ((headerMatch = headerRegex.exec(cmd)) !== null) {
+      const headerStr = headerMatch[2];
+      const colonIndex = headerStr.indexOf(':');
+      if (colonIndex !== -1) {
+        const key = headerStr.substring(0, colonIndex).trim();
+        const value = headerStr.substring(colonIndex + 1).trim();
+        result.headers[key] = value;
+      }
+      cmd = cmd.replace(headerMatch[0], '');
+    }
 
+    // Parse body data (-d, --data, --data-raw, --data-binary)
+    const dataRegex = /(?:-d|--data|--data-raw|--data-binary)\s+(['"])(.*?)\1/;
+    const dataMatch = cmd.match(dataRegex);
+    if (dataMatch) {
+      result.body = dataMatch[2];
+      cmd = cmd.replace(dataMatch[0], '');
+
+      // If body exists and no method specified, default to POST
+      if (result.method === 'GET') {
+        result.method = 'POST';
+      }
+
+      // Try to parse and format JSON body
       try {
-        const jsonBody = typeof result.body === 'string'
-          ? JSON.parse(result.body)
-          : result.body;
+        const jsonBody = JSON.parse(result.body);
         result.body = JSON.stringify(jsonBody);
       } catch {
+        // Not JSON, keep as is
       }
     }
 
-    const authHeader = result.headers['Authorization'] || result.headers['authorization'];
+    // Parse URL (usually the last unquoted argument or quoted string)
+    // Remove all flags and their values first
+    let urlCandidate = cmd
+      .replace(/(?:-[A-Za-z]|--[a-z-]+)\s+(['"].*?['"]|\S+)/g, '')
+      .trim();
 
+    // Try to extract URL from quotes first
+    const quotedUrlMatch = urlCandidate.match(/(['"])(https?:\/\/[^'"]+)\1/);
+    if (quotedUrlMatch) {
+      result.url = quotedUrlMatch[2];
+    } else {
+      // Find any http(s) URL
+      const urlMatch = urlCandidate.match(/(https?:\/\/\S+)/);
+      if (urlMatch) {
+        result.url = urlMatch[1].replace(/['"]$/, ''); // Remove trailing quote if any
+      }
+    }
+
+    // Extract auth from headers
+    const authHeader = result.headers['Authorization'] || result.headers['authorization'];
     if (authHeader) {
       if (authHeader.startsWith('Bearer ')) {
         result.auth = {
@@ -67,6 +116,7 @@ export const parseCurlCommand = (curlCommand: string): ParsedHttpRequest | null 
       }
     }
 
+    // Check for API key headers
     const apiKeyHeaders = ['X-API-Key', 'x-api-key', 'Api-Key', 'api-key', 'apikey', 'X-Api-Key'];
     for (const headerName of apiKeyHeaders) {
       if (result.headers[headerName]) {
@@ -77,6 +127,12 @@ export const parseCurlCommand = (curlCommand: string): ParsedHttpRequest | null 
         delete result.headers[headerName];
         break;
       }
+    }
+
+    // Validate that we at least got a URL
+    if (!result.url) {
+      console.error('Failed to extract URL from curl command');
+      return null;
     }
 
     return result;

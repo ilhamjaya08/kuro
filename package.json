@@ -28,7 +28,6 @@
   "dependencies": {
     "@clack/prompts": "^0.8.2",
     "cron-parser": "^4.9.0",
-    "curlconverter": "^4.12.0",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {

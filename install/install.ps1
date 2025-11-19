@@ -37,7 +37,7 @@ if (-not $isAdmin) {
 $arch = if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" }
 Write-Host "✓ Detected architecture: $arch" -ForegroundColor Green
 
-$downloadUrl = "https://github.com/$REPO/releases/latest/download/kuro-windows-$arch.exe"
+$downloadUrl = "https://github.com/$REPO/releases/download/beta/kuro-windows-$arch.exe"
 
 Write-Host "Downloading Kuro binary..." -ForegroundColor Cyan
 

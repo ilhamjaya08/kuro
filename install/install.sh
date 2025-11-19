@@ -75,7 +75,7 @@ check_permissions() {
 }
 
 download_binary() {
-    DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/kuro-${PLATFORM}"
+    DOWNLOAD_URL="https://github.com/${REPO}/releases/download/beta/kuro-${PLATFORM}"
 
     echo -e "${CYAN}Downloading Kuro binary...${NC}"
 

@@ -35,4 +35,7 @@ kuro.db
 kuro-data/
 
 BUGFIX.md
-DAEMON
+FILES.md
+PROJECT_SUMMARY.md
+QUICKSTART.md
+SETUP.md

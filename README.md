@@ -66,12 +66,12 @@ Lightweight • Fast • Easy to Use • Cross-Platform
 
 **Linux / macOS:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ilhamjaya08/kuro/main/install/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ilhamjaya08/kuro/refs/heads/master/install/install.sh | bash
 ```
 
 **Windows (PowerShell as Admin):**
 ```powershell
-irm https://raw.githubusercontent.com/ilhamjaya08/kuro/main/install/install.ps1 | iex
+irm https://raw.githubusercontent.com/ilhamjaya08/kuro/refs/heads/master/install/install.ps1 | iex
 ```
 
 ### Manual Installation
